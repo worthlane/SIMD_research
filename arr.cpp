@@ -74,7 +74,7 @@ inline int mm_movemask_ps (const float cmp[ARR_SIZE])
 
 void GenerateColor(u_int8_t* points, const int x, const int y, const int N);
 void CalcMandelbrot(sf::RenderWindow* window, u_int8_t* points, const float x_shift, const float y_shift, const float scale,
-                    const float R2_MAX[ARR_SIZE], const float SHIFT[ARR_SIZE]);
+                    const float R2_MAX[ARR_SIZE]);
 void HandleKeyboard(sf::Event* event, float* x_shift, float* y_shift, float* scale);
 void DumpPoints(sf::RenderWindow* window, u_int8_t* points);
 
@@ -154,8 +154,11 @@ void GenerateColor(u_int8_t* points, const int x, const int y, const int N)
 // -------------------------------------------------------
 
 void CalcMandelbrot(sf::RenderWindow* window, u_int8_t* points, const float x_shift, const float y_shift, const float scale,
-                    const float R2_MAX[ARR_SIZE], const float SHIFT[ARR_SIZE])
+                    const float R2_MAX[ARR_SIZE])
 {
+    float _01234567[ARR_SIZE] = {}; mm_set_ps(_01234567, 0.f * scale, 1.f * scale, 2.f * scale, 3.f * scale,
+                                                         4.f * scale, 5.f * scale, 6.f * scale, 7.f * scale);
+
     for (int y = 0; y < WIDTH; y++)
     {
         float x0 = ((-(float) LENGTH / 2) * dx) * scale + x_shift + X_PRE_SHIFT;
@@ -163,7 +166,7 @@ void CalcMandelbrot(sf::RenderWindow* window, u_int8_t* points, const float x_sh
 
         for (int x = 0; x < LENGTH; x += ARR_SIZE, x0 += ARR_SIZE * dx * scale)
         {
-            float DX[ARR_SIZE] = {}; mm_set_ps1(DX, dx); mm_mul_ps(DX, DX, SHIFT);
+            float DX[ARR_SIZE] = {}; mm_set_ps1(DX, dx); mm_mul_ps(DX, DX, _01234567);
 
             float X0[ARR_SIZE] = {}; mm_set_ps1(X0, x0); mm_add_ps(X0, X0, DX);
             float Y0[ARR_SIZE] = {}; mm_set_ps1(Y0, y0);
