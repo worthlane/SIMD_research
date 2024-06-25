@@ -107,17 +107,17 @@ void GenerateColor(u_int8_t* points, const int x, const int y, const int N)
 
 void CalcMandelbrot(sf::RenderWindow* window, u_int8_t* points, const float x_shift, const float y_shift, const float scale)
 {
-    for (int y = 0; y < WIDTH; y++)
+    for (volatile size_t y = 0; y < WIDTH; y++)
     {
         float x0 = ((-(float) LENGTH / 2) * dx) * scale + x_shift + X_PRE_SHIFT;
         float y0 = (((float) y - (float) WIDTH / 2) * dy) * scale + y_shift + Y_PRE_SHIFT;
 
-        for (int x = 0; x < LENGTH; x++, x0 += dx * scale)
+        for (volatile size_t x = 0; x < LENGTH; x++, x0 += dx * scale)
         {
             float X  = x0;
             float Y  = y0;
 
-            int N = 0;
+            volatile size_t N = 0;
 
             for (; N < N_MAX; N++)
             {

@@ -108,12 +108,12 @@ void CalcMandelbrot(sf::RenderWindow* window, u_int8_t* points, const float x_sh
     static const __m256 R2_MAX    = _mm256_set1_ps(10000.f);
     static const __m256 _01234567 = _mm256_set_ps(7.f, 6.f, 5.f, 4.f, 3.f, 2.f, 1.f, 0.f);
 
-    for (int y = 0; y < WIDTH; y++)
+    for (volatile size_t y = 0; y < WIDTH; y++)
     {
         float x0 = ((-(float) LENGTH / 2) * dx) * scale + x_shift + X_PRE_SHIFT;
         float y0 = (((float) y - (float) WIDTH / 2) * dy) * scale + y_shift + Y_PRE_SHIFT;
 
-        for (int x = 0; x < LENGTH; x += 8, x0 += 8 * dx * scale)
+        for (volatile size_t x = 0; x < LENGTH; x += 8, x0 += 8 * dx * scale)
         {
             __m256 DX = _mm256_mul_ps(_mm256_set1_ps(dx),
                                       _mm256_set_ps(7.f * scale, 6.f * scale, 5.f * scale, 4.f * scale,
@@ -127,7 +127,7 @@ void CalcMandelbrot(sf::RenderWindow* window, u_int8_t* points, const float x_sh
 
             __m256i N = _mm256_setzero_si256();
 
-            for (int n = 0; n < N_MAX; n++)
+            for (volatile size_t n = 0; n < N_MAX; n++)
             {
                 __m256 x2 = _mm256_mul_ps(X, X);
                 __m256 y2 = _mm256_mul_ps(Y, Y);
@@ -146,7 +146,7 @@ void CalcMandelbrot(sf::RenderWindow* window, u_int8_t* points, const float x_sh
             }
 
             float* n_iters = (float*) (&N);
-            for (int i = 0; i < 8; i++)
+            for (size_t i = 0; i < 8; i++)
                 GenerateColor(points, x + i, y, n_iters[i]);
         }
     }

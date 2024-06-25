@@ -159,12 +159,12 @@ void CalcMandelbrot(sf::RenderWindow* window, u_int8_t* points, const float x_sh
     float _01234567[ARR_SIZE] = {}; mm_set_ps(_01234567, 0.f * scale, 1.f * scale, 2.f * scale, 3.f * scale,
                                                          4.f * scale, 5.f * scale, 6.f * scale, 7.f * scale);
 
-    for (int y = 0; y < WIDTH; y++)
+    for (volatile size_t y = 0; y < WIDTH; y++)
     {
         float x0 = ((-(float) LENGTH / 2) * dx) * scale + x_shift + X_PRE_SHIFT;
         float y0 = (((float) y - (float) WIDTH / 2) * dy) * scale + y_shift + Y_PRE_SHIFT;
 
-        for (int x = 0; x < LENGTH; x += ARR_SIZE, x0 += ARR_SIZE * dx * scale)
+        for (volatile size_t x = 0; x < LENGTH; x += ARR_SIZE, x0 += ARR_SIZE * dx * scale)
         {
             float DX[ARR_SIZE] = {}; mm_set_ps1(DX, dx); mm_mul_ps(DX, DX, _01234567);
 
@@ -176,7 +176,7 @@ void CalcMandelbrot(sf::RenderWindow* window, u_int8_t* points, const float x_sh
 
             int    N[ARR_SIZE] = { 0, 0, 0, 0 };
 
-            for (int n = 0; n < N_MAX; n++)
+            for (volatile size_t n = 0; n < N_MAX; n++)
             {
                 float x2[ARR_SIZE] = {};  mm_mul_ps(x2, X, X);
                 float y2[ARR_SIZE] = {};  mm_mul_ps(y2, Y, Y);
